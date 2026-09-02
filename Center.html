@@ -6,102 +6,53 @@
   <title>영종복합문화센터 길찾기</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Noto Sans KR', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      background-color: #f5f5f7;
+      background-color: #f8f9fa;
     }
-    .card {
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    .container {
       text-align: center;
-      max-width: 360px;
-      width: 90%;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .status {
-      font-size: 15px;
-      color: #555;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-    .btn-kakao {
+    .btn-kakaomap {
       display: inline-block;
-      width: 100%;
-      padding: 16px 0;
-      background-color: #FEE500;
-      color: #191919;
+      padding: 15px 30px;
+      font-size: 18px;
       font-weight: bold;
-      font-size: 16px;
+      color: #000000;
+      background-color: #FEE500;
+      border: none;
+      border-radius: 8px;
       text-decoration: none;
-      border-radius: 10px;
-      box-sizing: border-box;
       cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .btn-kakaomap:hover {
+      background-color: #e6ce00;
     }
   </style>
 </head>
 <body>
 
-<div class="card">
+<div class="container">
   <h2>영종복합문화센터 오시는 길</h2>
-  <div id="status" class="status">내 위치를 확인하여<br>영종복합문화센터로 연결합니다...</div>
+  <p>아래 버튼을 누르시면 카카오맵 길찾기로 연결됩니다.</p>
   
-  <a id="mapLink" class="btn-kakao" href="#" style="display: none;">
-    📍 영종복합문화센터 길찾기
+  <!-- 클릭 시 카카오맵 길찾기로 이동 -->
+  <a class="btn-kakaomap" 
+     href="https://map.kakao.com/link/to/영종복합문화센터,37.4891,126.5592" 
+     target="_blank" 
+     rel="noopener noreferrer">
+     카카오맵 길찾기 시작
   </a>
 </div>
-
-<script>
-  // 100% 영종복합문화센터 목적지만 단독 설정
-  const destName = encodeURIComponent("영종복합문화센터");
-  const destLat = 37.4891;
-  const destLng = 126.5592;
-
-  const statusEl = document.getElementById("status");
-  const mapLinkEl = document.getElementById("mapLink");
-
-  // 캐시 방지를 위해 현재 시각(Timestamp) 파라미터 추가
-  const cacheBuster = "&v=" + new Date().getTime();
-  const fallbackUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLng}?${cacheBuster}`;
-
-  function navigate() {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const startLat = position.coords.latitude;
-          const startLng = position.coords.longitude;
-          const startName = encodeURIComponent("내위치");
-
-          // 목적지: 영종복합문화센터
-          const kakaoUrl = `https://map.kakao.com/link/destination/${destName},${destLat},${destLng}/sName/${startName}/sX/${startLng}/sY/${startLat}`;
-
-          statusEl.innerHTML = "위치 확인 완료!<br>영종복합문화센터 경로로 연결합니다.";
-          mapLinkEl.href = kakaoUrl;
-          mapLinkEl.style.display = "inline-block";
-
-          window.location.href = kakaoUrl;
-        },
-        (error) => {
-          statusEl.innerHTML = "위치 확인 불가로<br>목적지 전용 화면으로 이동합니다.";
-          mapLinkEl.href = fallbackUrl;
-          mapLinkEl.style.display = "inline-block";
-          window.location.href = fallbackUrl;
-        },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-      );
-    } else {
-      mapLinkEl.href = fallbackUrl;
-      mapLinkEl.style.display = "inline-block";
-      window.location.href = fallbackUrl;
-    }
-  }
-
-  window.onload = navigate;
-</script>
 
 </body>
 </html>
