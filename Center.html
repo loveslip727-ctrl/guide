@@ -1,58 +1,68 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>영종복합문화센터 길찾기</title>
-  <style>
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background-color: #f8f9fa;
-    }
-    .container {
-      text-align: center;
-      padding: 30px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    .btn-kakaomap {
-      display: inline-block;
-      padding: 15px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #000000;
-      background-color: #FEE500;
-      border: none;
-      border-radius: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .btn-kakaomap:hover {
-      background-color: #e6ce00;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영종복합문화센터 길찾기</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .message-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
+    <div class="message-box">
+        <h3>길찾기 안내</h3>
+        <p>현재 위치를 확인하여<br><strong>영종복합문화센터</strong>로 안내합니다.</p>
+        <p style="font-size: 0.9em; color: #666;">(위치 정보 접근을 '허용'해 주세요)</p>
+    </div>
 
-<div class="container">
-  <h2>영종복합문화센터 오시는 길</h2>
-  <p>아래 버튼을 누르시면 카카오맵 길찾기로 연결됩니다.</p>
-  
-  <!-- 카카오맵 검색 연동 (명칭/주소 기반 정확 이동) -->
-  <a class="btn-kakaomap" 
-     href="https://map.kakao.com/link/search/영종복합문화센터" 
-     target="_blank" 
-     rel="noopener noreferrer">
-     카카오맵 길찾기 시작
-  </a>
-</div>
+    <script>
+        function startRouting() {
+            // 브라우저가 위치 정보를 지원하는지 확인
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // 1. 사용자의 현재 위치 정보 가져오기
+                        const currentLat = position.coords.latitude;
+                        const currentLon = position.coords.longitude;
+                        
+                        // 2. 목적지(영종복합문화센터) 실제 좌표
+                        const destLat = 37.4891; 
+                        const destLon = 126.5592;
+                        const destName = encodeURIComponent("영종복합문화센터");
 
+                        // 3. 카카오맵 길찾기 URL 생성 (출발지: 내위치, 도착지: 영종복합문화센터)
+                        const url = `https://map.kakao.com/link/from/내위치,${currentLat},${currentLon}/to/${destName},${destLat},${destLon}`;
+                        
+                        // 4. 해당 URL로 페이지 자동 이동
+                        window.location.href = url;
+                    },
+                    function(error) {
+                        // 위치 정보 접근 거부 또는 에러 발생 시 처리
+                        alert("위치 정보를 가져올 수 없습니다. 권한을 허용했는지 확인해주세요.");
+                    }
+                );
+            } else {
+                alert("이 브라우저/기기에서는 위치 정보 기능을 지원하지 않습니다.");
+            }
+        }
+
+        // 페이지 로딩 시 자동으로 함수 실행
+        window.onload = startRouting;
+    </script>
 </body>
 </html>
