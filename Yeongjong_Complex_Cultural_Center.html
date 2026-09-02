@@ -23,11 +23,16 @@
       max-width: 360px;
       width: 90%;
     }
+    .status {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
     .btn-kakao {
-      display: block;
+      display: inline-block;
       width: 100%;
       padding: 16px 0;
-      margin-top: 20px;
       background-color: #FEE500;
       color: #191919;
       font-weight: bold;
@@ -35,6 +40,7 @@
       text-decoration: none;
       border-radius: 10px;
       box-sizing: border-box;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -42,16 +48,60 @@
 
 <div class="card">
   <h2>영종복합문화센터 오시는 길</h2>
-  <p style="color: #666; font-size: 14px;">버튼을 누르시면 카카오맵 앱 또는 웹으로 연결되어 자동으로 길안내가 시작됩니다.</p>
+  <div id="status" class="status">내 위치를 확인하여<br>영종복합문화센터로 연결합니다...</div>
   
-  <!-- 목적지를 영종복합문화센터로 지정한 카카오맵 링크 -->
-  <a class="btn-kakao" 
-     href="https://map.kakao.com/link/to/영종복합문화센터,37.4891,126.5592" 
-     target="_blank" 
-     rel="noopener noreferrer">
-    카카오맵으로 길찾기
+  <a id="mapLink" class="btn-kakao" href="#" style="display: none;">
+    📍 영종복합문화센터 길찾기
   </a>
 </div>
+
+<script>
+  // 100% 영종복합문화센터 목적지만 단독 설정
+  const destName = encodeURIComponent("영종복합문화센터");
+  const destLat = 37.4891;
+  const destLng = 126.5592;
+
+  const statusEl = document.getElementById("status");
+  const mapLinkEl = document.getElementById("mapLink");
+
+  // 캐시 방지를 위해 현재 시각(Timestamp) 파라미터 추가
+  const cacheBuster = "&v=" + new Date().getTime();
+  const fallbackUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLng}?${cacheBuster}`;
+
+  function navigate() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const startLat = position.coords.latitude;
+          const startLng = position.coords.longitude;
+          const startName = encodeURIComponent("내위치");
+
+          // 목적지: 영종복합문화센터
+          const kakaoUrl = `https://map.kakao.com/link/destination/${destName},${destLat},${destLng}/sName/${startName}/sX/${startLng}/sY/${startLat}`;
+
+          statusEl.innerHTML = "위치 확인 완료!<br>영종복합문화센터 경로로 연결합니다.";
+          mapLinkEl.href = kakaoUrl;
+          mapLinkEl.style.display = "inline-block";
+
+          window.location.href = kakaoUrl;
+        },
+        (error) => {
+          statusEl.innerHTML = "위치 확인 불가로<br>목적지 전용 화면으로 이동합니다.";
+          mapLinkEl.href = fallbackUrl;
+          mapLinkEl.style.display = "inline-block";
+          window.location.href = fallbackUrl;
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    } else {
+      mapLinkEl.href = fallbackUrl;
+      mapLinkEl.style.display = "inline-block";
+      window.location.href = fallbackUrl;
+    }
+  }
+
+  window.onload = navigate;
+</script>
 
 </body>
 </html>
