@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>영종복합문화센터 길찾기</title>
+    <title>영종국제도서관 길찾기</title>
     <style>
         body {
             font-family: 'Malgun Gothic', sans-serif;
@@ -26,7 +26,7 @@
 <body>
     <div class="message-box">
         <h3>길찾기 안내</h3>
-        <p>현재 위치를 확인하여<br><strong>영종복합문화센터</strong>로 안내합니다.</p>
+        <p>현재 위치를 확인하여<br><strong>영종국제도서관</strong>으로 안내합니다.</p>
         <p style="font-size: 0.9em; color: #666;">(위치 정보 접근을 '허용'해 주세요)</p>
     </div>
 
@@ -40,12 +40,12 @@
                         const currentLat = position.coords.latitude;
                         const currentLon = position.coords.longitude;
                         
-                        // 2. 목적지(영종복합문화센터) 실제 좌표
-                        const destLat = 37.492576; 
-                        const destLon = 126.541460;
-                        const destName = encodeURIComponent("영종복합문화센터");
+                        // 2. 목적지(영종국제도서관) 실제 좌표
+                        const destLat = 37.488344; 
+                        const destLon = 126.488738;
+                        const destName = encodeURIComponent("영종국제도서관");
 
-                        // 3. 카카오맵 길찾기 URL 생성 (출발지: 내위치, 도착지: 영종복합문화센터)
+                        // 3. 카카오맵 길찾기 URL 생성 (출발지: 내위치, 도착지: 영종국제도서관)
                         const url = `https://map.kakao.com/link/from/내위치,${currentLat},${currentLon}/to/${destName},${destLat},${destLon}`;
                         
                         // 4. 해당 URL로 페이지 자동 이동
